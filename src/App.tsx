@@ -4,6 +4,8 @@ import {
     act, BaseSyntheticEvent, lazy, memo, SyntheticEvent, useMemo, useReducer, useState
 } from 'react';
 
+import { Accordeon } from './components/Accordeon';
+
 const HeavyComponent = memo((props: {usernames: string[]}) => {
   console.log("Expensive computations...")
   return (
@@ -42,6 +44,16 @@ function App() {
         onClick={() => {dispatch({type: "changeColor"})}}
         onInput={(e: BaseSyntheticEvent) => {dispatch({type: "handleInput", payload: e.target.value})}} />
       <button onClick={() => setCounter(counter + 1)}>{counter}</button>
+
+      <div>
+        <Accordeon title='Items' bulletIcon={<p>👍</p>}>
+          {(width: number, height: number) => {
+            return(
+              <p>{width} x {height}</p>
+            )
+          }}
+        </Accordeon>
+      </div>
     </div>
   );
 }
