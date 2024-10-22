@@ -1,7 +1,8 @@
 import './App.css';
 
 import {
-    act, BaseSyntheticEvent, lazy, memo, SyntheticEvent, useMemo, useReducer, useState
+    act, BaseSyntheticEvent, Dispatch, lazy, memo, SetStateAction, SyntheticEvent, useMemo,
+    useReducer, useState
 } from 'react';
 
 import { Accordeon } from './components/Accordeon';
@@ -30,10 +31,18 @@ const appReducer = (state: AppState, action: {type: string, payload?: any}): App
   return {...state}
 }
 
+const getInputProps = (value: string, setValue: Dispatch<SetStateAction<string>>) => {
+  return {
+    value: value,
+    onInput: (e: BaseSyntheticEvent) => setValue(e.target.value)
+  }
+}
+
 function App() {
   const [counter, setCounter] = useState<number>(0)
   const usernames = useMemo(() => ["a", "b", "c"], [])
   const [state, dispatch] = useReducer(appReducer, {inputColor: "#000000", inputText: ""})
+  const [inputState, setInputState] = useState<string>("")
   return (
     <div className="App">
       {counter > 3 && <HeavyComponent usernames={usernames} />}
@@ -53,6 +62,7 @@ function App() {
             )
           }}
         </Accordeon>
+        <input type="text" {...getInputProps(inputState, setInputState)} />
       </div>
     </div>
   );
