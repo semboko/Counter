@@ -1,19 +1,47 @@
-import { ReactElement, useEffect, useState } from 'react';
+import {
+    createContext, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState
+} from 'react';
 
-export const Accordeon = (props: {title: string, children: (width: number, height: number) => ReactElement, bulletIcon?: ReactElement}) => {
+class AccordeonContextData {
+    bullet?: ReactElement
+    itemIdx: number = 0
+    setItemIdx?: Dispatch<SetStateAction<number>> 
 
-    const [size, setSize] = useState({width: window.innerWidth, height: window.innerHeight})
+    constructor (bullet?: ReactElement, itemIdx?: number, setItemIdx?: Dispatch<SetStateAction<number>>){
+        this.bullet = bullet
+        this.itemIdx = itemIdx || 0
+        this.setItemIdx = setItemIdx
+    }
+}
 
-    useEffect(() => {
-        const handleResize = () => {
-            setSize({width: window.innerWidth, height: window.innerHeight})
-        }
-        window.addEventListener("resize", handleResize)
-        return () => {window.removeEventListener("resize", handleResize)}
-    })
-    return (<>
-        <h1>{props.title}</h1>
-        {props.bulletIcon}
-        {props.children(size.width, size.height)}
-    </>)
+
+const AccordeonContext = createContext<AccordeonContextData>(
+    new AccordeonContextData()
+)
+
+export const AccordeonItem = (props: {id: number, label: string, content: string}) => {
+
+    const context = useContext(AccordeonContext)
+
+    return (
+        <div className="Accordeon-Item">
+            <h1 onClick={() => {context.setItemIdx!(props.id)}}>{context.bullet}{props.label}</h1>
+            {context.itemIdx === props.id && <div className="Item-Content">{props.content}</div>}
+        </div>
+    )
+}
+
+
+export const Accordeon = (props: {title: string, children: ReactElement[], bulletIcon?: ReactElement}) => {
+
+    const [activeItem, setActiveItem] = useState<number>(0)
+
+    return (
+        <div className="Accordeon">
+            <h1>{props.title}</h1>
+            <AccordeonContext.Provider value={new AccordeonContextData(props.bulletIcon, activeItem, setActiveItem)}>
+                {props.children}
+            </AccordeonContext.Provider>
+        </div>
+    )
 }

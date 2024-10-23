@@ -5,7 +5,7 @@ import {
     useReducer, useState
 } from 'react';
 
-import { Accordeon } from './components/Accordeon';
+import { Accordeon, AccordeonItem } from './components/Accordeon';
 
 const HeavyComponent = memo((props: {usernames: string[]}) => {
   console.log("Expensive computations...")
@@ -55,12 +55,11 @@ function App() {
       <button onClick={() => setCounter(counter + 1)}>{counter}</button>
 
       <div>
-        <Accordeon title='Items' bulletIcon={<p>👍</p>}>
-          {(width: number, height: number) => {
-            return(
-              <p>{width} x {height}</p>
-            )
-          }}
+        <Accordeon title='Items' bulletIcon={<span>😂</span>}>
+          <AccordeonItem id={0} label='label1' content='content1' />
+          <hr />
+          <AccordeonItem id={1} label='label2' content='content2' />
+          <AccordeonItem id={2} label='label3' content='content3' />
         </Accordeon>
         <input type="text" {...getInputProps(inputState, setInputState)} />
       </div>
