@@ -6,6 +6,7 @@ import {
 } from 'react';
 
 import { Accordeon, AccordeonItem } from './components/Accordeon';
+import { CanvasReference, SimpleReference } from './components/References';
 
 const HeavyComponent = memo((props: {usernames: string[]}) => {
   console.log("Expensive computations...")
@@ -63,6 +64,9 @@ function App() {
         </Accordeon>
         <input type="text" {...getInputProps(inputState, setInputState)} />
       </div>
+
+      <SimpleReference />
+      <CanvasReference />
     </div>
   );
 }
